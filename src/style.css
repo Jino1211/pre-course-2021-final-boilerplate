@@ -1,3 +1,10 @@
+:root {
+  --main-font: "Hachi Maru Pop", cursive;
+}
+* {
+  font-family: var(--main-font);
+  text-align: center;
+}
 .todo-text {
   display: inline-block;
   padding: 2%;
