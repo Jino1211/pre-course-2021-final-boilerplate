@@ -1,0 +1,8 @@
+.todo-text {
+  display: inline-block;
+  padding: 2%;
+}
+.todo-priority {
+  display: inline;
+  margin: 1%;
+}
