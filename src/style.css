@@ -15,6 +15,12 @@
 }
 .todo-created-at {
   display: inline;
+  font-size: 70%;
+}
+.delete-button {
+  position: relative;
+  margin-right: 5%;
+  font-size: 60%;
 }
 #sort-button {
   position: relative;

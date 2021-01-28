@@ -5,6 +5,7 @@ let clicksParagraph = document.querySelector('#counter-paragraph span');
 let todoContainer;
 let clicks = 0;
 
+read();
 
 const addForm = document.forms['add-form']; 
 
@@ -16,12 +17,13 @@ addForm.addEventListener('submit', (e) => {
     let timeCreated = new Date();
     timeCreated = timeCreated.toLocaleString();
     addTodoContainer();
+    deleteButton();
     addPriority(valuePriority);
     addInput(valueInput);
     addDate(timeCreated);
-    makeObject(valueInput, timeCreated, valuePriority, clicks)
     addForm.querySelector('input[type="text"]').value = "";
     addForm.querySelector('select').value = '1';
+    makeObject(valueInput, timeCreated, valuePriority, clicks)
 })
 
 //build the container div for the inputs
@@ -51,6 +53,17 @@ function addInput (valueInput) {
     todoContainer.append(todoText);
     todoText.innerText = valueInput;
 }
+
+function deleteButton () {
+    const deleteButton = document.createElement('button');
+    deleteButton.classList.add('delete-button');
+    todoContainer.append(deleteButton);
+    deleteButton.innerText = 'Delete';
+}
+// todoContainer.addEventListener('click' (e) => {
+//     e.target
+//     console.log('hi');
+//  })
 
 //count the clicks and print it on the document
 addForm.addEventListener('submit', (e) => {
@@ -88,40 +101,75 @@ function replaceItemsByPriority (item, j) {
     console.log(containerText, containerDate, containerPriority);
 }
 
+
 function makeObject(valueInput, timeCreated, valuePriority, clicks) {
     const detailsInput = {};
     detailsInput.text = valueInput;
     detailsInput.date = timeCreated;
     detailsInput.priority = valuePriority;
     arrayContainerItems.push(detailsInput)
-    let json = JSON.stringify(arrayContainerItems);
-    sendJson(json);
+    const json = JSON.stringify(arrayContainerItems);
+    create(JSON.stringify(detailsInput));
     console.log(arrayContainerItems);
 }
 
-function sendJson (json) {
-    let req = new XMLHttpRequest();
-
-    req.onreadystatechange = () => {
-      if (req.readyState == XMLHttpRequest.DONE) {
-        console.log(req.responseText);
-      }
-    };
-    
-    req.open("PUT", "https://api.jsonbin.io/b/6012861488655a7f320e685a", true);
-    req.setRequestHeader("Content-Type", "application/json");
-    req.setRequestHeader("secret-key", "$2b$10$ZFiUgXxIT37j9HZKTvXJkOfMRxB0OzLbyOCbiPFSr4AOca6buiMYi");
-    req.send(json);
-}
-// 6012861488655a7f320e685a
-// document.addEventListener(onload, getFromJsonBin)
-async function getFromJsonBin() {
-    const response = await fetch ('https://api.jsonbin.io/b/6012861488655a7f320e685a', {
+//create post api request to jsonbin server
+async function create (json) {
+    const response = await fetch('https://api.jsonbin.io/v3/b', {
+        method: 'POST',
         headers: {
-            "secret-key": "$2b$10$ZFiUgXxIT37j9HZKTvXJkOfMRxB0OzLbyOCbiPFSr4AOca6buiMYi"
-        }
-    })
-    const data = await response.json();
-    console.log(data);
+          'Content-Type': 'application/json',
+          'X-Master-Key': '$2b$10$ZFiUgXxIT37j9HZKTvXJkOfMRxB0OzLbyOCbiPFSr4AOca6buiMYi',
+          'X-Collection-Id': '60127ad79f55707f6dfd20a9',
+          'X-Bin-Private': false,
+          'X-Bin-Name': 'mose'
+        },
+        body : json
+      })
+      .then(data => console.log(data))
+      .catch(err => console.log(err));
 }
-getFromJsonBin();
+
+//get 
+async function read () {
+    try {
+        await fetch('https://api.jsonbin.io/v3/c/60127ad79f55707f6dfd20a9/bins/2', {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-Master-Key': '$2b$10$ZFiUgXxIT37j9HZKTvXJkOfMRxB0OzLbyOCbiPFSr4AOca6buiMYi'
+            }
+          })
+          .then(res => res.json())
+          .then(data => {
+              console.log("data", data)
+              insertSaveDataToDocument(data)
+          })
+          .catch(err => console.log("error", err));
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+//upload the save task from the server 
+function insertSaveDataToDocument (data) {
+    if (data) {
+        // secure the jsonbin server from error message
+        if (!data.hasOwnProperty('message')) {
+            for (let task of data) {
+                addTodoContainer();
+                addPriority(task.priority);
+                addInput(task.text);
+                addDate(task.date);
+                arrayContainerItems.push(task)
+
+
+            }
+        }
+    }
+}
+// addTodoContainer();
+// addPriority(valuePriority);
+// addInput(valueInput);
+// addDate(timeCreated);
+// makeObject(valueInput, timeCreated, valuePriority, clicks)
