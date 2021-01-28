@@ -16,3 +16,9 @@
 .todo-created-at {
   display: inline;
 }
+#sort-button {
+  position: relative;
+}
+#add-form {
+  display: inline;
+}
