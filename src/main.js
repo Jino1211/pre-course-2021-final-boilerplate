@@ -1,10 +1,9 @@
 const viewSection = document.querySelector('#view-section');
 const controlSection = document.querySelector('#control-section');
+const sortButton = document.querySelector('#sort-button');
 let clicksParagraph = document.querySelector('#counter-paragraph span');
 let todoContainer;
 let clicks = 0;
-const sortButton = document.querySelector('#sort-button');
-
 
 
 const addForm = document.forms['add-form']; 
@@ -64,21 +63,12 @@ addForm.addEventListener('submit', (e) => {
 })
 
 let arrayContainerItems = [];
-function makeObject(valueInput, timeCreated, valuePriority, clicks) {
-    const detailsInput = {};
-    detailsInput.text = valueInput;
-    detailsInput.date = timeCreated;
-    detailsInput.priority = valuePriority;
-    arrayContainerItems.push(detailsInput)
-    let json = JSON.stringify(arrayContainerItems);
-    console.log(arrayContainerItems);
-}
 
 //sort of function that check by priority from 5-1 and send it to => "replaceItemsByPriority" 
 sortButton.addEventListener('click', () => {
     let j = 0;
-  for (let i = 5; i > 0; i--) {  
-    for (let item of arrayContainerItems) {
+    for (let i = 5; i > 0; i--) {  
+        for (let item of arrayContainerItems) {
             if (item.priority === `${i}`) {
                 replaceItemsByPriority(item, j++);
                 console.log(item.priority);
@@ -98,6 +88,40 @@ function replaceItemsByPriority (item, j) {
     console.log(containerText, containerDate, containerPriority);
 }
 
+function makeObject(valueInput, timeCreated, valuePriority, clicks) {
+    const detailsInput = {};
+    detailsInput.text = valueInput;
+    detailsInput.date = timeCreated;
+    detailsInput.priority = valuePriority;
+    arrayContainerItems.push(detailsInput)
+    let json = JSON.stringify(arrayContainerItems);
+    sendJson(json);
+    console.log(arrayContainerItems);
+}
 
+function sendJson (json) {
+    let req = new XMLHttpRequest();
 
-
+    req.onreadystatechange = () => {
+      if (req.readyState == XMLHttpRequest.DONE) {
+        console.log(req.responseText);
+      }
+    };
+    
+    req.open("PUT", "https://api.jsonbin.io/b/6012861488655a7f320e685a", true);
+    req.setRequestHeader("Content-Type", "application/json");
+    req.setRequestHeader("secret-key", "$2b$10$ZFiUgXxIT37j9HZKTvXJkOfMRxB0OzLbyOCbiPFSr4AOca6buiMYi");
+    req.send(json);
+}
+// 6012861488655a7f320e685a
+// document.addEventListener(onload, getFromJsonBin)
+async function getFromJsonBin() {
+    const response = await fetch ('https://api.jsonbin.io/b/6012861488655a7f320e685a', {
+        headers: {
+            "secret-key": "$2b$10$ZFiUgXxIT37j9HZKTvXJkOfMRxB0OzLbyOCbiPFSr4AOca6buiMYi"
+        }
+    })
+    const data = await response.json();
+    console.log(data);
+}
+getFromJsonBin();
