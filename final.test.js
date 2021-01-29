@@ -84,11 +84,13 @@ describe(projectName, () => {
   });
 
   test("The todo list should be empty first", async () => {
+    console.log("before nock")
     await nock("https://api.jsonbin.io/v3").get(/.*/).reply(200, mocks.initBin);
-
+    console.log("after nock")
     await page.goto(path, { waitUntil: "networkidle0" });
-
+    console.log("after network")
     const elements = await page.$$(".todo-text");
+    console.log("get elements")
     expect(elements.length).toBe(0);
   });
 
@@ -103,6 +105,7 @@ describe(projectName, () => {
       .put(/.*/, () => true)
       .reply(200, mocks.toDoAddResponse);
 
+      console.log("toDoAddResponse" , JSON.stringify(mocks.toDoAddResponse));
     await page.goto(path, { waitUntil: "networkidle0" });
 
     await page.type("#text-input", firstTaskText);

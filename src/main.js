@@ -3,6 +3,7 @@ const controlSection = document.querySelector('#control-section');
 const sortButton = document.querySelector('#sort-button');
 let clicksParagraph = document.querySelector('#counter-paragraph span');
 let arrayContainerItems = [];
+let mayTodo = {};
 let todoContainer;
 let taskNumber = 0;
 let counterId = 1;
@@ -19,11 +20,11 @@ addForm.addEventListener('submit', (e) => {
     timeCreated = timeCreated.toLocaleString();
     makeObject(valueInput, timeCreated, valuePriority, taskNumber);
     addTodoContainer();
-    deleteButton();
-    checkBoxButton();
     addPriority(valuePriority);
     addInput(valueInput);
     addDate(timeCreated);
+    deleteButton();
+    checkBoxButton();
     addForm.querySelector('input[type="text"]').value = "";
     addForm.querySelector('select').value = '1';
 })
@@ -58,11 +59,11 @@ function addInput (valueInput) {
 }
 
 function deleteButton () {
-    const deleteButton = document.createElement('button');
-    deleteButton.classList.add('delete-button');
-    todoContainer.append(deleteButton);
-    deleteButton.innerText = 'Delete';
-    deleteButton.addEventListener('click', (e) => {
+    const img = document.createElement('img');
+    img.setAttribute('src', './images/garbage.jpg');
+    img.classList.add('garbage-img');
+    todoContainer.append(img);
+    img.addEventListener('click', (e) => {
         e.target.parentElement.parentElement.removeChild(e.target.parentElement);
         taskNumber--;
         howManyTask(taskNumber);
@@ -122,9 +123,8 @@ function makeObject(valueInput, timeCreated, valuePriority, taskNumber) {
     detailsInput.id = counterId;
     arrayContainerItems.push(detailsInput);
     counterId++;
-
-    create(arrayContainerItems);
-    console.log(arrayContainerItems);
+    myTodo = {'my-todo': arrayContainerItems};
+    create(myTodo);
 }
 
 function checkBoxButton () {
@@ -132,25 +132,36 @@ function checkBoxButton () {
     checkBox.setAttribute('type', 'checkbox');
     checkBox.classList.add('check-box');
     todoContainer.append(checkBox);
+    checkBox.addEventListener('change', (e) => {
+        if (e.target.checked) {
+            e.target.parentElement.classList.toggle('done');
+        } else {
+            e.target.parentElement.classList.toggle('done')
+        }
+    })
 }
 
 
 // create post API request to jsonbin server
-async function create (arrayContainerItems) {
-    console.log("arrayContainerItems", arrayContainerItems);
-    await fetch('https://api.jsonbin.io/v3/b/60130624ef99c57c734b2b7c', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Master-Key': '$2b$10$ZFiUgXxIT37j9HZKTvXJkOfMRxB0OzLbyOCbiPFSr4AOca6buiMYi',
-          'X-Collection-Id': '6013058bef99c57c734b2b3f',
-          'X-Bin-Private': false,
-        //   'X-Bin-Name': Array.id
-        },
-        body : JSON.stringify(arrayContainerItems)
-      })
-      .then(data => console.log(data))
-      .catch(err => console.log(err));
+async function create (myTodo) {
+    console.log("myTodo", myTodo);
+    try {
+        const data = await fetch('https://api.jsonbin.io/v3/b/60130624ef99c57c734b2b7c', {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-Master-Key': '$2b$10$ZFiUgXxIT37j9HZKTvXJkOfMRxB0OzLbyOCbiPFSr4AOca6buiMYi',
+              'X-Collection-Id': '6013058bef99c57c734b2b3f',
+              'X-Bin-Private': false,
+            //   'X-Bin-Name': Array.id
+            },
+            body : JSON.stringify(myTodo)
+          })
+        console.log("Recieved data", data)
+    } catch (e) {
+        console.error("there was an error:" + e);
+    }
+
 }
 
 //get 
@@ -165,21 +176,22 @@ async function read () {
           })
           .then(res => res.json())
           .then(data => {
-              console.log("data", data);
+              console.log("data", data.record);
               insertSaveDataToDocument(data.record);
           })
-          .catch(err => console.log("error", err));
+          .catch(error => console.log("error", error));
     } catch (error) {
         console.log(error.message);
     }
 }
 
 //upload the save task from the server 
-function insertSaveDataToDocument (arr) {
-    console.log("arr", arr)
-    if (arr) {
+function insertSaveDataToDocument (data) {
+    console.log("data", data)
+    if (data) {
         // secure the jsonbin server from error message
-        for (let task of arr) {
+        
+        for (let task of data['my-todo']) {
             addTodoContainer();
             addPriority(task.priority);
             addInput(task.text);
@@ -188,8 +200,8 @@ function insertSaveDataToDocument (arr) {
             checkBoxButton();
             howManyTask(++taskNumber);
         }
+        arrayContainerItems = data['my-todo'];
         counterId = arr[arr.length-1].id+1; // make sure
-        arrayContainerItems = arr;
     }
 }
 // addTodoContainer();

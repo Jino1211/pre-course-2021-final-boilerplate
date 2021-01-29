@@ -5,28 +5,46 @@
   font-family: var(--main-font);
   text-align: center;
 }
-/* .todo-container {
-  border: 0.2em solid rgb(243, 157, 157);
-  margin: 0.5% 25%;
-} */
+.buttons {
+  cursor: pointer;
+}
+.todo-container {
+  position: relative;
+  right: 21%;
+  margin-top: 4%;
+  float: right;
+}
+.todo-container.done {
+  text-decoration-line: line-through;
+}
 .todo-text {
-  display: inline-block;
+  display: inline;
   padding: 2%;
 }
 .todo-priority {
   display: inline;
+  font-weight: bold;
   margin: 1%;
 }
 .todo-created-at {
   display: inline;
   font-size: 70%;
 }
-.delete-button {
-  margin-right: 5%;
-  font-size: 60%;
-  margin: 1%;
+.garbage-img {
+  position: relative;
+  top: 0.3em;
+  width: 2.5%;
+  margin: auto 1%;
+  cursor: pointer;
+}
+.garbage-img:hover {
+  padding: 0.1%;
 }
 .check-box {
+}
+
+#priority-selector {
+  cursor: pointer;
 }
 #sort-button {
   position: relative;
