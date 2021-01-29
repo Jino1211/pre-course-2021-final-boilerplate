@@ -2,9 +2,10 @@ const viewSection = document.querySelector('#view-section');
 const controlSection = document.querySelector('#control-section');
 const sortButton = document.querySelector('#sort-button');
 let clicksParagraph = document.querySelector('#counter-paragraph span');
+let arrayContainerItems = [];
 let todoContainer;
-let clicks = 0;
-
+let taskNumber = 0;
+let counterId = 1;
 read();
 
 const addForm = document.forms['add-form']; 
@@ -16,20 +17,22 @@ addForm.addEventListener('submit', (e) => {
     const valuePriority = addForm.querySelector('select').value;
     let timeCreated = new Date();
     timeCreated = timeCreated.toLocaleString();
+    makeObject(valueInput, timeCreated, valuePriority, taskNumber);
     addTodoContainer();
     deleteButton();
+    checkBoxButton();
     addPriority(valuePriority);
     addInput(valueInput);
     addDate(timeCreated);
     addForm.querySelector('input[type="text"]').value = "";
     addForm.querySelector('select').value = '1';
-    makeObject(valueInput, timeCreated, valuePriority, clicks)
 })
 
 //build the container div for the inputs
 function addTodoContainer() {
     todoContainer = document.createElement('div');
     todoContainer.classList.add('todo-container')
+    todoContainer.setAttribute('id', `task${counterId}`)
     viewSection.prepend(todoContainer);
 }
 //get the priority  and add it to the list
@@ -59,23 +62,32 @@ function deleteButton () {
     deleteButton.classList.add('delete-button');
     todoContainer.append(deleteButton);
     deleteButton.innerText = 'Delete';
+    deleteButton.addEventListener('click', (e) => {
+        e.target.parentElement.parentElement.removeChild(e.target.parentElement);
+        taskNumber--;
+        howManyTask(taskNumber);
+        arrayContainerItems.pop();
+        create(arrayContainerItems);
+     })
 }
-// todoContainer.addEventListener('click' (e) => {
-//     e.target
-//     console.log('hi');
-//  })
 
-//count the clicks and print it on the document
-addForm.addEventListener('submit', (e) => {
-    clicks++;
-    if(clicks > 1) {
-        clicksParagraph.innerText = `${clicks} tasks`;  
+
+
+addForm.addEventListener('submit', () => {
+    taskNumber++
+    howManyTask(taskNumber);
+}) 
+
+//count the taskNumber and print it on the document
+function howManyTask (taskNumber) {
+    if(taskNumber > 1) {
+        clicksParagraph.innerText = `${taskNumber} tasks`;  
     } else { 
-        clicksParagraph.innerText = `${clicks} task`;
+        clicksParagraph.innerText = `${taskNumber} task`;
     }
-})
+}
 
-let arrayContainerItems = [];
+
 
 //sort of function that check by priority from 5-1 and send it to => "replaceItemsByPriority" 
 sortButton.addEventListener('click', () => {
@@ -101,30 +113,41 @@ function replaceItemsByPriority (item, j) {
     console.log(containerText, containerDate, containerPriority);
 }
 
-
-function makeObject(valueInput, timeCreated, valuePriority, clicks) {
+//creat an object from task details and push it to the main array
+function makeObject(valueInput, timeCreated, valuePriority, taskNumber) {
     const detailsInput = {};
     detailsInput.text = valueInput;
     detailsInput.date = timeCreated;
     detailsInput.priority = valuePriority;
-    arrayContainerItems.push(detailsInput)
-    const json = JSON.stringify(arrayContainerItems);
-    create(JSON.stringify(detailsInput));
+    detailsInput.id = counterId;
+    arrayContainerItems.push(detailsInput);
+    counterId++;
+
+    create(arrayContainerItems);
     console.log(arrayContainerItems);
 }
 
-//create post api request to jsonbin server
-async function create (json) {
-    const response = await fetch('https://api.jsonbin.io/v3/b', {
-        method: 'POST',
+function checkBoxButton () {
+    const checkBox = document.createElement('input');
+    checkBox.setAttribute('type', 'checkbox');
+    checkBox.classList.add('check-box');
+    todoContainer.append(checkBox);
+}
+
+
+// create post API request to jsonbin server
+async function create (arrayContainerItems) {
+    console.log("arrayContainerItems", arrayContainerItems);
+    await fetch('https://api.jsonbin.io/v3/b/60130624ef99c57c734b2b7c', {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           'X-Master-Key': '$2b$10$ZFiUgXxIT37j9HZKTvXJkOfMRxB0OzLbyOCbiPFSr4AOca6buiMYi',
-          'X-Collection-Id': '60127ad79f55707f6dfd20a9',
+          'X-Collection-Id': '6013058bef99c57c734b2b3f',
           'X-Bin-Private': false,
-          'X-Bin-Name': 'mose'
+        //   'X-Bin-Name': Array.id
         },
-        body : json
+        body : JSON.stringify(arrayContainerItems)
       })
       .then(data => console.log(data))
       .catch(err => console.log(err));
@@ -133,7 +156,7 @@ async function create (json) {
 //get 
 async function read () {
     try {
-        await fetch('https://api.jsonbin.io/v3/c/60127ad79f55707f6dfd20a9/bins/2', {
+        await fetch('https://api.jsonbin.io/v3/b/60130624ef99c57c734b2b7c/latest', {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -142,8 +165,8 @@ async function read () {
           })
           .then(res => res.json())
           .then(data => {
-              console.log("data", data)
-              insertSaveDataToDocument(data)
+              console.log("data", data);
+              insertSaveDataToDocument(data.record);
           })
           .catch(err => console.log("error", err));
     } catch (error) {
@@ -152,24 +175,25 @@ async function read () {
 }
 
 //upload the save task from the server 
-function insertSaveDataToDocument (data) {
-    if (data) {
+function insertSaveDataToDocument (arr) {
+    console.log("arr", arr)
+    if (arr) {
         // secure the jsonbin server from error message
-        if (!data.hasOwnProperty('message')) {
-            for (let task of data) {
-                addTodoContainer();
-                addPriority(task.priority);
-                addInput(task.text);
-                addDate(task.date);
-                arrayContainerItems.push(task)
-
-
-            }
+        for (let task of arr) {
+            addTodoContainer();
+            addPriority(task.priority);
+            addInput(task.text);
+            addDate(task.date);
+            deleteButton();
+            checkBoxButton();
+            howManyTask(++taskNumber);
         }
+        counterId = arr[arr.length-1].id+1; // make sure
+        arrayContainerItems = arr;
     }
 }
 // addTodoContainer();
 // addPriority(valuePriority);
 // addInput(valueInput);
 // addDate(timeCreated);
-// makeObject(valueInput, timeCreated, valuePriority, clicks)
+// makeObject(valueInput, timeCreated, valuePriority, taskNumber)

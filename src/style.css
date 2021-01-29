@@ -5,6 +5,10 @@
   font-family: var(--main-font);
   text-align: center;
 }
+/* .todo-container {
+  border: 0.2em solid rgb(243, 157, 157);
+  margin: 0.5% 25%;
+} */
 .todo-text {
   display: inline-block;
   padding: 2%;
@@ -18,9 +22,11 @@
   font-size: 70%;
 }
 .delete-button {
-  position: relative;
   margin-right: 5%;
   font-size: 60%;
+  margin: 1%;
+}
+.check-box {
 }
 #sort-button {
   position: relative;
