@@ -1,7 +1,7 @@
 const viewSection = document.querySelector('#view-section');
 const controlSection = document.querySelector('#control-section');
 const sortButton = document.querySelector('#sort-button');
-let clicksParagraph = document.querySelector('#counter-paragraph span');
+let clicksSpan = document.querySelector('#counter');
 let arrayContainerItems = [];
 let mayTodo = {};
 let todoContainer;
@@ -75,16 +75,19 @@ function deleteButton () {
 
 
 addForm.addEventListener('submit', () => {
-    taskNumber++
+    taskNumber++;
     howManyTask(taskNumber);
 }) 
 
 //count the taskNumber and print it on the document
 function howManyTask (taskNumber) {
+    let spanTask = document.querySelector('#span-task')
     if(taskNumber > 1) {
-        clicksParagraph.innerText = `${taskNumber} tasks`;  
+        spanTask.innerText = ' tasks';
+        clicksSpan.innerText = `${taskNumber}`; 
+
     } else { 
-        clicksParagraph.innerText = `${taskNumber} task`;
+        clicksSpan.innerText = `${taskNumber}`;
     }
 }
 
