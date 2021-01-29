@@ -19,7 +19,8 @@
 }
 .todo-text {
   display: inline;
-  padding: 2%;
+  padding: 1%;
+  border-radius: 5%;
 }
 .todo-priority {
   display: inline;
@@ -40,9 +41,31 @@
 .garbage-img:hover {
   padding: 0.1%;
 }
+.edit-img {
+  position: relative;
+  width: 2.5%;
+  top: 0.3em;
+  margin: auto 1%;
+  cursor: pointer;
+}
+.finishEdit {
+  display: inline;
+  position: relative;
+  float: left;
+  left: 30%;
+  width: 2%;
+  top: 0.6em;
+  cursor: pointer;
+}
+.finishEdit.invisible {
+  display: none;
+}
 .check-box {
 }
-
+#view-section {
+  position: relative;
+  left: 7%;
+}
 #priority-selector {
   cursor: pointer;
 }

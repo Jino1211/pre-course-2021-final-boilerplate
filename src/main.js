@@ -24,6 +24,7 @@ addForm.addEventListener('submit', (e) => {
     addInput(valueInput);
     addDate(timeCreated);
     deleteButton();
+    editButton();
     checkBoxButton();
     addForm.querySelector('input[type="text"]').value = "";
     addForm.querySelector('select').value = '1';
@@ -36,7 +37,7 @@ function addTodoContainer() {
     todoContainer.setAttribute('id', `task${counterId}`)
     viewSection.append(todoContainer);
 }
-//get the priority  and add it to the list
+//get the priority and add it to the list
 function addPriority (valuePriority) {
     const todoPriority = document.createElement('div');
     todoPriority.classList.add('todo-priority');
@@ -68,11 +69,38 @@ function deleteButton () {
         taskNumber--;
         howManyTask(taskNumber);
         arrayContainerItems.pop();
+        if(!arrayContainerItems) {
+            create ('I Am Empty')     // this is make sure the server get something but still the task list stay empty without this 
+        }                              // the server don't let the option PUT with empty array/object
         create(arrayContainerItems);
      })
 }
 
+function editButton () {
+    const img = document.createElement('img');
+    img.setAttribute('src', './images/edit.jpg');
+    img.classList.add('edit-img');
+    todoContainer.append(img);
+    img.addEventListener('click', (e) => {
+        const parent = e.target.parentElement.children[1]
+        parent.contentEditable = true;
+        parent.style.backgroundColor = '#ffcccc' 
+        const done = document.createElement('img');
+        done.setAttribute('src', './images/done.jpg');
+        e.target.parentElement.append(done);
+        done.classList.add('finishEdit');
+        doneButton(done, parent);
+        
+    })
+}
 
+function doneButton (done, parent) {
+    done.addEventListener('click', (e) => {
+      parent.contentEditable = false;
+      parent.style.backgroundColor = 'white';
+        done.classList.add('invisible');
+    })
+}
 
 addForm.addEventListener('submit', () => {
     taskNumber++;
@@ -126,8 +154,7 @@ function makeObject(valueInput, timeCreated, valuePriority, taskNumber) {
     detailsInput.id = counterId;
     arrayContainerItems.push(detailsInput);
     counterId++;
-    myTodo = {'my-todo': arrayContainerItems};
-    create(myTodo);
+    create(arrayContainerItems);
 }
 
 function checkBoxButton () {
@@ -144,9 +171,9 @@ function checkBoxButton () {
     })
 }
 
-
 // create post API request to jsonbin server
-async function create (myTodo) {
+async function create (arrayContainerItems) {
+    myTodo = {'my-todo': arrayContainerItems};
     console.log("myTodo", myTodo);
     try {
         const data = await fetch('https://api.jsonbin.io/v3/b/60130624ef99c57c734b2b7c', {
@@ -201,11 +228,13 @@ function insertSaveDataToDocument (data) {
             addInput(task.text);
             addDate(task.date);
             deleteButton();
+            editButton();
             checkBoxButton();
             howManyTask(++taskNumber);
         }
-    //     counterId = arr[arr.length-1].id+1; // make sure
-    }
+    console.log(arrayContainerItems); // make sure
+    counterId = arrayContainerItems[arrayContainerItems.length-1].id+1; // make sure
+    } else {console.log('empty');}
 }
 // addTodoContainer();
 // addPriority(valuePriority);
