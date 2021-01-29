@@ -34,7 +34,7 @@ function addTodoContainer() {
     todoContainer = document.createElement('div');
     todoContainer.classList.add('todo-container')
     todoContainer.setAttribute('id', `task${counterId}`)
-    viewSection.prepend(todoContainer);
+    viewSection.append(todoContainer);
 }
 //get the priority  and add it to the list
 function addPriority (valuePriority) {
@@ -187,11 +187,12 @@ async function read () {
 
 //upload the save task from the server 
 function insertSaveDataToDocument (data) {
-    console.log("data", data)
-    if (data) {
+    arrayContainerItems = data['my-todo'];
+    console.log("data", arrayContainerItems)
+    if (arrayContainerItems) {
         // secure the jsonbin server from error message
         
-        for (let task of data['my-todo']) {
+        for (let task of arrayContainerItems) {
             addTodoContainer();
             addPriority(task.priority);
             addInput(task.text);
@@ -200,8 +201,7 @@ function insertSaveDataToDocument (data) {
             checkBoxButton();
             howManyTask(++taskNumber);
         }
-        arrayContainerItems = data['my-todo'];
-        counterId = arr[arr.length-1].id+1; // make sure
+    //     counterId = arr[arr.length-1].id+1; // make sure
     }
 }
 // addTodoContainer();
