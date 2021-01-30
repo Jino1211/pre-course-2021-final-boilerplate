@@ -1,6 +1,7 @@
 const viewSection = document.querySelector('#view-section');
 const controlSection = document.querySelector('#control-section');
 const sortButton = document.querySelector('#sort-button');
+const searchButton = document.querySelector('#search-button');
 let clicksSpan = document.querySelector('#counter');
 let arrayContainerItems = [];
 let mayTodo = {};
@@ -26,6 +27,7 @@ addForm.addEventListener('submit', (e) => {
     deleteButton();
     editButton();
     checkBoxButton();
+    counterId++;
     addForm.querySelector('input[type="text"]').value = "";
     addForm.querySelector('select').value = '1';
 })
@@ -34,7 +36,7 @@ addForm.addEventListener('submit', (e) => {
 function addTodoContainer() {
     todoContainer = document.createElement('div');
     todoContainer.classList.add('todo-container')
-    todoContainer.setAttribute('id', `task${counterId}`)
+    todoContainer.setAttribute('id', counterId)
     viewSection.append(todoContainer);
 }
 //get the priority and add it to the list
@@ -58,17 +60,27 @@ function addInput (valueInput) {
     todoContainer.append(todoText);
     todoText.innerText = valueInput;
 }
-
+//set the delete button on the task
 function deleteButton () {
     const img = document.createElement('img');
     img.setAttribute('src', './images/garbage.jpg');
     img.classList.add('garbage-img');
     todoContainer.append(img);
+
+// delete the task and update the main array + server
     img.addEventListener('click', (e) => {
+        const ownId = e.target.parentElement.getAttribute('id');
+        let i = 0;
+        for (let task of arrayContainerItems) {
+            if (task.id === Number(ownId)) { 
+                break;
+            } 
+            i++;
+        }
         e.target.parentElement.parentElement.removeChild(e.target.parentElement);
         taskNumber--;
         howManyTask(taskNumber);
-        arrayContainerItems.pop();
+        arrayContainerItems.splice(i, 1);
         if(!arrayContainerItems) {
             create ('I Am Empty')     // this is make sure the server get something but still the task list stay empty without this 
         }                              // the server don't let the option PUT with empty array/object
@@ -76,32 +88,45 @@ function deleteButton () {
      })
 }
 
+
+// this function create a edit button + active his options to edit the text.
 function editButton () {
     const img = document.createElement('img');
     img.setAttribute('src', './images/edit.jpg');
     img.classList.add('edit-img');
     todoContainer.append(img);
     img.addEventListener('click', (e) => {
-        const parent = e.target.parentElement.children[1]
-        parent.contentEditable = true;
-        parent.style.backgroundColor = '#ffcccc' 
-        const done = document.createElement('img');
-        done.setAttribute('src', './images/done.jpg');
-        e.target.parentElement.append(done);
-        done.classList.add('finishEdit');
-        doneButton(done, parent);
-        
+        const textContent = e.target.parentElement.children[1]
+            textContent.contentEditable = true;
+            textContent.style.backgroundColor = '#ffcccc' 
+            img.setAttribute('src', './images/done.jpg');
+            img.classList.add('finishEdit');
+            doneButton(img, textContent);  
+        // }
     })
 }
 
-function doneButton (done, parent) {
-    done.addEventListener('click', (e) => {
-      parent.contentEditable = false;
-      parent.style.backgroundColor = 'white';
-        done.classList.add('invisible');
+//this is active when the user click on edit button, it is change the button to done button, end define his options. 
+function doneButton (img, textContent) {
+    img.addEventListener('click', (e) => {
+            let i = 0;
+            for (let task of arrayContainerItems) {
+                if (task.id === Number(textContent.parentElement.getAttribute('id'))) { 
+                    task.text = textContent.innerText;
+                    create(arrayContainerItems);
+                    break;
+                } 
+                i++;
+            }
+            textContent.contentEditable = false;
+            textContent.style.backgroundColor = 'white';
+            img.classList.remove('finishEdit');
+            img.setAttribute('src', './images/edit.jpg');
+        // }
     })
 }
 
+//update the number of task.
 addForm.addEventListener('submit', () => {
     taskNumber++;
     howManyTask(taskNumber);
@@ -134,6 +159,26 @@ sortButton.addEventListener('click', () => {
     }   
 })
 
+searchButton.addEventListener('click', (e) => {
+    const searchValue = document.querySelector('#text-search').value;
+    for (task of arrayContainerItems) {
+        if (task.text.toLowerCase() === searchValue.toLowerCase()) {
+        const id = task.id;
+        document.getElementById(id).classList.toggle('find');
+            switch (searchButton.innerText) {
+                case 'search':
+                    searchButton.innerText = 'click again to cancel';
+                    break;
+                case 'click again to cancel':
+                    searchButton.innerText = 'search';
+            }
+        }
+    }
+})
+console.log();
+
+
+
 //get item (object) and replace the document by priority
 function replaceItemsByPriority (item, j) {
     let containerText = document.querySelectorAll('.todo-text');
@@ -153,8 +198,8 @@ function makeObject(valueInput, timeCreated, valuePriority, taskNumber) {
     detailsInput.priority = valuePriority;
     detailsInput.id = counterId;
     arrayContainerItems.push(detailsInput);
-    counterId++;
     create(arrayContainerItems);
+    
 }
 
 function checkBoxButton () {
@@ -170,6 +215,7 @@ function checkBoxButton () {
         }
     })
 }
+
 
 // create post API request to jsonbin server
 async function create (arrayContainerItems) {
@@ -224,6 +270,7 @@ function insertSaveDataToDocument (data) {
         
         for (let task of arrayContainerItems) {
             addTodoContainer();
+            counterId++;
             addPriority(task.priority);
             addInput(task.text);
             addDate(task.date);
@@ -232,8 +279,8 @@ function insertSaveDataToDocument (data) {
             checkBoxButton();
             howManyTask(++taskNumber);
         }
-    console.log(arrayContainerItems); // make sure
     counterId = arrayContainerItems[arrayContainerItems.length-1].id+1; // make sure
+    console.log(arrayContainerItems); // make sure
     } else {console.log('empty');}
 }
 // addTodoContainer();

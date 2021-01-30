@@ -49,18 +49,23 @@
   cursor: pointer;
 }
 .finishEdit {
-  display: inline;
   position: relative;
-  float: left;
-  left: 30%;
-  width: 2%;
-  top: 0.6em;
+  width: 2.5%;
+  top: 0.3em;
+  margin: auto 1%;
   cursor: pointer;
 }
-.finishEdit.invisible {
-  display: none;
+.todo-container.find {
+  border: steelblue solid 0.2em;
+  font-weight: bold;
+  background-color: rgb(255, 255, 155);
 }
 .check-box {
+}
+#search-section {
+  padding: 1%;
+}
+#search-button {
 }
 #view-section {
   position: relative;
