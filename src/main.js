@@ -111,14 +111,14 @@ undoButton.addEventListener('click', (e) => {
 // this function create a edit button + active his options to edit the text.
 function editButton () {
     const img = document.createElement('img');
-    img.setAttribute('src', './images/edit.jpg');
+    img.setAttribute('src', './images/edit.jpg.png');
     img.classList.add('edit-img');
     todoContainer.append(img);
     img.addEventListener('click', (e) => {
         const textContent = e.target.parentElement.children[1]
             textContent.contentEditable = true;
             textContent.style.backgroundColor = '#ffcccc' 
-            img.setAttribute('src', './images/done.jpg');
+            img.setAttribute('src', './images/done.jpg.png');
             img.classList.add('finishEdit');
             doneButton(img, textContent);  
         // }
@@ -138,9 +138,9 @@ function doneButton (img, textContent) {
                 i++;
             }
             textContent.contentEditable = false;
-            textContent.style.backgroundColor = 'white';
+            textContent.style.backgroundColor = '';
             img.classList.remove('finishEdit');
-            img.setAttribute('src', './images/edit.jpg');
+            img.setAttribute('src', './images/edit.jpg.png');
         // }
     })
 }
@@ -180,21 +180,24 @@ sortButton.addEventListener('click', () => {
 // find if the search value include in the task and remark them.
 searchButton.addEventListener('click', (e) => {
     const searchValue = document.querySelector('#text-search').value;
-    for (task of arrayContainerItems) {
-        if (task.text.toLowerCase().includes(searchValue.toLowerCase())) {
-        const id = task.id;
-        document.getElementById(id).classList.toggle('find');
-            switch (searchButton.innerText) {
-                case 'Search':
-                    searchButton.innerText = 'click again to cancel';
-                    break;
-                case 'click again to cancel':
-                    searchButton.innerText = 'Search';
+    if (searchValue){
+        for (task of arrayContainerItems) {
+            if (task.text.toLowerCase().includes(searchValue.toLowerCase())) {
+            const id = task.id;
+            document.getElementById(id).classList.toggle('find');
+                switch (searchButton.innerText) {
+                    case 'Search':
+                        searchButton.innerText = 'click again to cancel';
+                        break;
+                    case 'click again to cancel':
+                        searchButton.innerText = 'Search';
+                }
             }
         }
     }
 })
 
+//sort the list from newest to oldest and opposite.
 sortOfDateButton.addEventListener('click', (e) => {
     arrayContainerItems.reverse();
     switch (sortOfDateButton.innerText) {

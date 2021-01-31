@@ -12,13 +12,13 @@
   <body>
 
     <div id="main-container">
-      <header>
-        <h1 id="h1">To-Do List</h1>
-        <p id="counter-paragraph">Do you have <span id="counter">0</span><span id="span-task"> task</span> to do</p>
-      </header>
       <section class="control-section">
+        <header>
+          <h1 id="h1">To-Do List</h1>
+          <p id="counter-paragraph">Do you have <span id="counter">0</span><span id="span-task"> task</span> to do</p>
+        </header>
         <form id="add-form">
-          <input type="text" id="text-input" required>
+          <input type="text" id="text-input" maxlength="40" required >
           <select name="priority" id="priority-selector">
           <option value="1">1</option>
           <option value="2">2</option>
@@ -33,10 +33,10 @@
           <input type="text" id="text-search" placeholder="search task" type="search">
           <button class="buttons" id="search-button">Search</button>
           <button class="buttons" id="date-sort">Oldest</button>
-          <img src="./images/undo.jpg" alt="undo" class="buttons" id="undo">
+          <img src="./images/undo.jpg.png" alt="undo" id="undo">
         </section>
       </section>
-      <section id="view-section">
+      <section id="view-section" class="view">
         <div class="loader"></div>
       </section>
 

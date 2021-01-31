@@ -1,40 +1,80 @@
 :root {
   --main-font: "Hachi Maru Pop", cursive;
+  --text-color: rgb(241, 241, 241);
 }
 * {
   font-family: var(--main-font);
   text-align: center;
 }
+h1 {
+  font-size: 250%;
+  text-shadow: 0.1em 0.1em var(--text-color);
+}
+header {
+}
+input {
+  border-radius: 3em;
+}
+select {
+  border-radius: 5em;
+}
 .buttons {
+  background-color: #487032;
+  color: var(--text-color);
   cursor: pointer;
 }
+.buttons:hover {
+  padding: 0.2%;
+}
+@keyframes through-line {
+  from {
+    text-decoration-color: transparent;
+  }
+  to {
+    text-decoration-color: auto;
+  }
+}
 .todo-container {
+  margin-right: 15%;
+  padding: 0.2%;
+  margin-top: 3.2%;
+  width: 50%;
   position: relative;
   right: 21%;
-  margin-top: 4%;
   float: right;
 }
 .todo-container.done {
-  text-decoration-line: line-through;
+  text-decoration: line-through red wavy;
+  text-decoration-thickness: 0.2em;
+  animation: through-line 2s linear;
 }
 .todo-text {
   display: inline;
   padding: 1%;
   border-radius: 5%;
+  color: var(--text-color);
+  font-size: 130%;
 }
 .todo-priority {
   display: inline;
+  float: left;
   font-weight: bold;
-  margin: 1%;
 }
 .todo-created-at {
   display: inline;
-  font-size: 70%;
+  position: relative;
+  float: left;
+  bottom: 10%;
+  padding-left: 1%;
+  font-size: 60%;
+  color: bisque;
 }
 .garbage-img {
   position: relative;
+  display: inline;
+  float: right;
+  width: 3.5%;
   top: 0.3em;
-  width: 2.5%;
   margin: auto 1%;
   cursor: pointer;
 }
@@ -43,7 +83,9 @@
 }
 .edit-img {
   position: relative;
-  width: 2.5%;
+  display: inline;
+  float: right;
+  width: 3.5%;
   top: 0.3em;
   margin: auto 1%;
   cursor: pointer;
@@ -53,26 +95,32 @@
 }
 .finishEdit {
   position: relative;
-  width: 2.5%;
+  display: inline;
+  float: right;
+  width: 3.5%;
   top: 0.3em;
   margin: auto 1%;
   cursor: pointer;
 }
 .todo-container.find {
-  border: steelblue solid 0.2em;
+  border: rgba(163, 112, 17, 0.623) solid 0.2em;
   font-weight: bold;
-  background-color: rgb(255, 255, 155);
+  border-radius: 2em;
 }
 .check-box {
+  position: relative;
+  display: inline;
+  float: right;
   cursor: pointer;
+  margin: 1.5% 1%;
 }
 .loader.run {
   position: relative;
   top: 6em;
-  left: 34%;
-  border: 16px solid #f3f3f3;
+  left: 30%;
+  border: 16px solid #64471d;
   border-radius: 50%;
-  border-top: 16px solid #3498db;
+  border-top: 16px solid var(--text-color);
   width: 10em;
   height: 10em;
   animation: spin 2s linear infinite;
@@ -86,22 +134,24 @@
   }
 }
 #undo {
-  width: 3%;
+  background-color: none;
+  width: 2.2%;
   position: relative;
-  top: 0.8em;
+  top: 0.7em;
+  cursor: pointer;
 }
 #undo:hover {
-  border: blanchedalmond 0.2em solid;
+  border: blanchedalmond 0.1em solid;
 }
 #search-section {
   margin-left: 3.8%;
-  padding: 1%;
+  padding-top: 0.2%;
 }
 #search-button {
 }
 #view-section {
   position: relative;
-  left: 7%;
+  left: 13%;
 }
 #priority-selector {
   cursor: pointer;
@@ -111,4 +161,10 @@
 }
 #add-form {
   display: inline;
+}
+body {
+  background-image: url(./images/empty-notes.jpg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 90%;
 }
