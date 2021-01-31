@@ -162,6 +162,24 @@ select {
 #add-form {
   display: inline;
 }
+#span-yes-no {
+  position: relative;
+  left: 18%;
+}
+#yes-button {
+  width: 2%;
+  position: relative;
+  left: 21%;
+  cursor: pointer;
+  top: 0.3em;
+}
+#no-button {
+  width: 2%;
+  position: relative;
+  left: 22%;
+  top: 0.8em;
+  cursor: pointer;
+}
 body {
   background-image: url(./images/empty-notes.jpg);
   background-repeat: no-repeat;

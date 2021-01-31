@@ -11,6 +11,9 @@ let todoContainer;
 let taskNumber = 0;
 let counterId = 1;
 let history = [];
+let yesButton;
+let noButton;
+let spanYesNo;
 read();
 
 const addForm = document.forms['add-form']; 
@@ -70,9 +73,29 @@ function deleteButton () {
     img.classList.add('garbage-img');
     todoContainer.append(img);
 
-// delete the task and update the main array + server
-    img.addEventListener('click', (e) => {
-        const ownId = e.target.parentElement.getAttribute('id');
+// create sure yes/no button before delete.
+img.addEventListener('click', (e) => {
+        spanYesNo = document.createElement('span')
+        viewSection.append(spanYesNo);
+        spanYesNo.innerText = 'Are You Sure?'
+        spanYesNo.setAttribute('id', 'span-yes-no')
+        yesButton = document.createElement('img');
+        yesButton.setAttribute('src', './images/yes-button.jpg.png');
+        yesButton.setAttribute('id', 'yes-button');
+        noButton = document.createElement('img');
+        noButton.setAttribute('src', './images/no-button.jpg.png');
+        noButton.setAttribute('id', 'no-button');
+        viewSection.append(yesButton);
+        viewSection.append(noButton);
+        const parentElem = e.target.parentElement;
+        yesDelete(parentElem);
+        noDelete();
+    })
+}
+// if user click on yes, function delete the task and remove the buttons. 
+function yesDelete(parentElem) {
+    yesButton.addEventListener('click', () => {
+        const ownId = parentElem.getAttribute('id'); 
         let i = 0;
         for (let task of arrayContainerItems) {
             if (task.id === Number(ownId)) { 
@@ -81,18 +104,30 @@ function deleteButton () {
             } 
             i++;
         }
-        e.target.parentElement.parentElement.removeChild(e.target.parentElement);
+        parentElem.parentElement.removeChild(parentElem);
         taskNumber--;
         howManyTask(taskNumber);
         arrayContainerItems.splice(i, 1);
+        spanYesNo.remove();
+        noButton.remove();
+        yesButton.remove();
         console.log(arrayContainerItems);
         if(!arrayContainerItems) {
             create ('I Am Empty')     // this is make sure the server get something but still the task list stay empty without this 
         }                              // the server don't let the option PUT with empty array/object
         create(arrayContainerItems);
-     })
+    })
 }
 
+//if user click no remove the button- yes/no without delete the task. 
+function noDelete() {
+    noButton.addEventListener('click', () => {
+        spanYesNo.remove();
+        noButton.remove();
+        yesButton.remove();
+    })
+}
+    
 //cancel the last delete action.
 undoButton.addEventListener('click', (e) => {
     let lastTask = history.pop();
