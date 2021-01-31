@@ -3,6 +3,7 @@ const controlSection = document.querySelector('#control-section');
 const sortButton = document.querySelector('#sort-button');
 const searchButton = document.querySelector('#search-button');
 const undoButton = document.querySelector('#undo');
+const sortOfDateButton = document.querySelector('#date-sort');
 let clicksSpan = document.querySelector('#counter');
 let arrayContainerItems = [];
 let mayTodo = {};
@@ -92,6 +93,7 @@ function deleteButton () {
      })
 }
 
+//cancel the last delete action.
 undoButton.addEventListener('click', (e) => {
     let lastTask = history.pop();
         counterId++;
@@ -161,43 +163,55 @@ function howManyTask (taskNumber) {
     }
 }
 
-
-
 //sort of function that check by priority from 5-1 and send it to => "replaceItemsByPriority" 
 sortButton.addEventListener('click', () => {
     let j = 0;
     for (let i = 5; i > 0; i--) {  
         for (let item of arrayContainerItems) {
             if (item.priority === `${i}`) {
-                replaceItemsByPriority(item, j++);
+                replaceItemsBySort(item, j++);
                 console.log(item.priority);
             }
         }    
     }   
 })
 
+
+// find if the search value include in the task and remark them.
 searchButton.addEventListener('click', (e) => {
     const searchValue = document.querySelector('#text-search').value;
     for (task of arrayContainerItems) {
-        if (task.text.toLowerCase() === searchValue.toLowerCase()) {
+        if (task.text.toLowerCase().includes(searchValue.toLowerCase())) {
         const id = task.id;
         document.getElementById(id).classList.toggle('find');
             switch (searchButton.innerText) {
-                case 'search':
+                case 'Search':
                     searchButton.innerText = 'click again to cancel';
                     break;
                 case 'click again to cancel':
-                    searchButton.innerText = 'search';
+                    searchButton.innerText = 'Search';
             }
         }
     }
 })
-console.log();
 
-
+sortOfDateButton.addEventListener('click', (e) => {
+    arrayContainerItems.reverse();
+    switch (sortOfDateButton.innerText) {
+        case 'Newest':
+            sortOfDateButton.innerText = 'Oldest';
+            break;
+        case 'Oldest':
+            sortOfDateButton.innerText = 'Newest';
+    } 
+    let j = 0;
+    for (task of arrayContainerItems) {
+        replaceItemsBySort(task, j++);
+    }
+})
 
 //get item (object) and replace the document by priority
-function replaceItemsByPriority (item, j) {
+function replaceItemsBySort (item, j) {
     let containerText = document.querySelectorAll('.todo-text');
     containerText[j].innerText = item.text;
     let containerDate = document.querySelectorAll('.todo-created-at');

@@ -48,6 +48,9 @@
   margin: auto 1%;
   cursor: pointer;
 }
+.edit-img:hover {
+  padding: 0.1%;
+}
 .finishEdit {
   position: relative;
   width: 2.5%;
@@ -61,6 +64,7 @@
   background-color: rgb(255, 255, 155);
 }
 .check-box {
+  cursor: pointer;
 }
 .loader.run {
   position: relative;
@@ -87,9 +91,10 @@
   top: 0.8em;
 }
 #undo:hover {
-  background-color: turquoise;
+  border: blanchedalmond 0.2em solid;
 }
 #search-section {
+  margin-left: 3.8%;
   padding: 1%;
 }
 #search-button {
