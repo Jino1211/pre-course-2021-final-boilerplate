@@ -2,12 +2,14 @@ const viewSection = document.querySelector('#view-section');
 const controlSection = document.querySelector('#control-section');
 const sortButton = document.querySelector('#sort-button');
 const searchButton = document.querySelector('#search-button');
+const undoButton = document.querySelector('#undo');
 let clicksSpan = document.querySelector('#counter');
 let arrayContainerItems = [];
 let mayTodo = {};
 let todoContainer;
 let taskNumber = 0;
 let counterId = 1;
+let history = [];
 read();
 
 const addForm = document.forms['add-form']; 
@@ -15,11 +17,12 @@ const addForm = document.forms['add-form'];
 //when click on button that function grab the inputs and the time and send it to the right function.
 addForm.addEventListener('submit', (e) => {
     e.preventDefault();
+    counterId++;
     const valueInput = addForm.querySelector('input[type="text"]').value;
     const valuePriority = addForm.querySelector('select').value;
     let timeCreated = new Date();
     timeCreated = timeCreated.toLocaleString();
-    makeObject(valueInput, timeCreated, valuePriority, taskNumber);
+    makeObject(valueInput, timeCreated, valuePriority);
     addTodoContainer();
     addPriority(valuePriority);
     addInput(valueInput);
@@ -27,7 +30,6 @@ addForm.addEventListener('submit', (e) => {
     deleteButton();
     editButton();
     checkBoxButton();
-    counterId++;
     addForm.querySelector('input[type="text"]').value = "";
     addForm.querySelector('select').value = '1';
 })
@@ -73,6 +75,7 @@ function deleteButton () {
         let i = 0;
         for (let task of arrayContainerItems) {
             if (task.id === Number(ownId)) { 
+                history.push(task);
                 break;
             } 
             i++;
@@ -81,6 +84,7 @@ function deleteButton () {
         taskNumber--;
         howManyTask(taskNumber);
         arrayContainerItems.splice(i, 1);
+        console.log(arrayContainerItems);
         if(!arrayContainerItems) {
             create ('I Am Empty')     // this is make sure the server get something but still the task list stay empty without this 
         }                              // the server don't let the option PUT with empty array/object
@@ -88,6 +92,19 @@ function deleteButton () {
      })
 }
 
+undoButton.addEventListener('click', (e) => {
+    let lastTask = history.pop();
+        counterId++;
+        console.log(lastTask);
+        makeObject(lastTask.text, lastTask.date, lastTask.priority, taskNumber);
+        addTodoContainer();
+        addPriority(lastTask.priority);
+        addInput(lastTask.text);
+        addDate(lastTask.date);
+        deleteButton();
+        editButton();
+        checkBoxButton();
+})
 
 // this function create a edit button + active his options to edit the text.
 function editButton () {
@@ -191,7 +208,7 @@ function replaceItemsByPriority (item, j) {
 }
 
 //creat an object from task details and push it to the main array
-function makeObject(valueInput, timeCreated, valuePriority, taskNumber) {
+function makeObject(valueInput, timeCreated, valuePriority) {
     const detailsInput = {};
     detailsInput.text = valueInput;
     detailsInput.date = timeCreated;
@@ -242,6 +259,7 @@ async function create (arrayContainerItems) {
 
 //get 
 async function read () {
+    document.querySelector('.loader').classList.add('run');
     try {
         await fetch('https://api.jsonbin.io/v3/b/60130624ef99c57c734b2b7c/latest', {
             method: 'GET',
@@ -264,13 +282,15 @@ async function read () {
 //upload the save task from the server 
 function insertSaveDataToDocument (data) {
     arrayContainerItems = data['my-todo'];
+    document.querySelector('.loader').classList.remove('run')
     console.log("data", arrayContainerItems)
     if (arrayContainerItems) {
         // secure the jsonbin server from error message
+        // counterId = arrayContainerItems[arrayContainerItems.length-1].id+1; // make sure
         
         for (let task of arrayContainerItems) {
+            counterId = task.id;
             addTodoContainer();
-            counterId++;
             addPriority(task.priority);
             addInput(task.text);
             addDate(task.date);
@@ -279,7 +299,6 @@ function insertSaveDataToDocument (data) {
             checkBoxButton();
             howManyTask(++taskNumber);
         }
-    counterId = arrayContainerItems[arrayContainerItems.length-1].id+1; // make sure
     console.log(arrayContainerItems); // make sure
     } else {console.log('empty');}
 }
