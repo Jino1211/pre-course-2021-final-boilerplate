@@ -86,7 +86,10 @@ test('Delete', async () => {
     await page.click('input#text-input')
     await page.type('input#text-input', 'Its my first test');
     await page.click('button#add-button');
-   
+    
+    await page.click('input#text-input')
+    await page.type('input#text-input', 'Its my second test');
+    await page.click('button#add-button');
 
     await page.click('button#restore');
     

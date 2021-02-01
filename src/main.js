@@ -142,6 +142,8 @@ undoButton.addEventListener('click', (e) => {
         deleteButton();
         editButton();
         checkBoxButton();
+        taskNumber++;
+        howManyTask(taskNumber);
 })
 
 // this function create a edit button + active his options to edit the text.
@@ -257,7 +259,6 @@ function replaceItemsBySort (item, j) {
     containerDate[j].innerText = item.date;
     let containerPriority = document.querySelectorAll('.todo-priority');
     containerPriority[j].innerText = item.priority;
-    console.log(containerText, containerDate, containerPriority);
 }
 
 //creat an object from task details and push it to the main array
@@ -366,8 +367,3 @@ function insertSaveDataToDocument (data) {
     console.log(arrayContainerItems); // make sure
     } else {console.log('empty');}
 }
-// addTodoContainer();
-// addPriority(valuePriority);
-// addInput(valueInput);
-// addDate(timeCreated);
-// makeObject(valueInput, timeCreated, valuePriority, taskNumber)
