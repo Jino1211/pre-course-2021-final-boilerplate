@@ -1,30 +1,30 @@
 my to-do list 
 
-In "my to-do list" I tried to do things simple and clear for the user on the one hand, but still functional and useful on the other.
+In "my to-do list" I tried to do things simple and clear for the user on the one hand, but still be functional and useful on the other.
 
-I also added some exta function like those:
+I also added some exta functions like those:
 
-* 'clear the board' button that restore all the task.
+* 'Clear the board' - button that restore all the tasks.
 
-* create js file 'main.test.js' to test the restore option.
+* Create 'js' file 'main.test.js' to test the restore option.
 
-* 'undo' that can restore the last delete evry click.
+* 'Undo' - that can restore the last delete every click.
 
-* 'oldest/newes' sort the board from the newes to oldest tasks and oposite.
+* 'Oldest/newest' - sort the board from the newest to oldest tasks and opposite.
 
-* 'search' that can find and remark the tasks with the insert input.
+* 'Search' - that can find and remark the tasks with the insert input.
 
-* all the task and the update changes save on JSONBIN.IO.
+* All the tasks and the updates save on JSONBIN.IO.
 
-* delete button for each task.
+* Delete button for each task.
 
-* sure option after click delete, for make sure.
+* Sure option after click delete, for make sure.
 
-* edit button for each task.
+* Edit button for each task.
 
-* loading spinner when you oppen the browser and wait for 'GET' requestfrom JSONBIN.
+* Loading spinner when you oppen the browser and wait for 'GET' request from JSONBIN.
 
-* check box for task that finished 
+* Check box for task that finished 
 
 
 
