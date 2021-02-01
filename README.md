@@ -31,7 +31,7 @@ I also added some exta functions like those:
  
 
 
-https://hnet.com/video-to-gif/viewimage/20210131-23-wwT5BEMA88JChPGx-lxUFqo-HNET - GIF קצר שמראה שימוש באלפליקציה
+https://hnet.com/video-to-gif/viewimage/20210131-23-wwT5BEMA88JChPGx-lxUFqo-HNET - GIF that give litle brif on the app.
 
 
 
@@ -57,7 +57,7 @@ mdn httprequeste
 
 w3schools.com
 
-https://css-tricks.com/custom-styling-form-inputs-with-modern-css-features/
+https://css-tricks.com/
 
 https://www.youtube.com/watch?v=K7AHtWR2Zyk&t=1447s
 
