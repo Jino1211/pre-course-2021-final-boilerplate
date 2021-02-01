@@ -37,7 +37,7 @@ I also added some exta function like those:
 
 
 
-links
+links:
 
 Github page  -  https://jino1211.github.io/pre-course-2021-final-boilerplate/src/index.html
 
@@ -45,7 +45,9 @@ Github reposittories  - https://github.com/Jino1211/pre-course-2021-final-boiler
 
 Challenge me success submit - http://34.123.35.48/challenges/15
 
-resources 
+
+
+resources :
 
 stackoverflow.com
 
