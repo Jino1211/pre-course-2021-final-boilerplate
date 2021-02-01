@@ -31,7 +31,7 @@ I also added some exta functions like those:
  
 
 
-
+https://hnet.com/video-to-gif/viewimage/20210131-23-wwT5BEMA88JChPGx-lxUFqo-HNET - GIF קצר שמראה שימוש באלפליקציה
 
 
 
