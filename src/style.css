@@ -37,7 +37,7 @@ select {
 .todo-container {
   margin-right: 15%;
   padding: 0.2%;
-  margin-top: 3.2%;
+  margin-top: 2.3%;
   width: 50%;
   position: relative;
   right: 21%;
@@ -164,7 +164,7 @@ select {
 }
 #span-yes-no {
   position: relative;
-  left: 18%;
+  left: 20%;
 }
 #yes-button {
   width: 2%;
@@ -183,6 +183,6 @@ select {
 body {
   background-image: url(./images/empty-notes.jpg);
   background-repeat: no-repeat;
-  background-position: center;
+  background-position: top;
   background-size: 90%;
 }

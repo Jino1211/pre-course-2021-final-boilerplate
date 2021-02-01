@@ -1,3 +1,4 @@
+const restoreButton = document.querySelector('#restore'); 
 const viewSection = document.querySelector('#view-section');
 const controlSection = document.querySelector('#control-section');
 const sortButton = document.querySelector('#sort-button');
@@ -284,6 +285,17 @@ function checkBoxButton () {
         }
     })
 }
+
+restoreButton.addEventListener('click', () => {
+    let taskOnBoard = document.querySelectorAll('.todo-container');
+    for (let task of taskOnBoard) {
+        task.parentElement.removeChild(task);
+        taskNumber--;
+        howManyTask(taskNumber);
+        arrayContainerItems.pop();
+    }
+    create (arrayContainerItems);
+})
 
 
 // create post API request to jsonbin server

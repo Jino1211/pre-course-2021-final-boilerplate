@@ -66,7 +66,7 @@ describe(projectName, () => {
     browser = await puppeteer.launch({
       // headless: false, // Uncomment me to see tests running in browser
       args: ["--disable-web-security"],
-      // slowMo: 50, // Uncomment and change me to slow down tests speed in browser.
+      // slowMo: 80, // Uncomment and change me to slow down tests speed in browser.
     });
     page = await browser.newPage();
     useNock(page, ["https://api.jsonbin.io/v3"]);
@@ -84,13 +84,11 @@ describe(projectName, () => {
   });
 
   test("The todo list should be empty first", async () => {
-    console.log("before nock")
     await nock("https://api.jsonbin.io/v3").get(/.*/).reply(200, mocks.initBin);
-    console.log("after nock")
+
     await page.goto(path, { waitUntil: "networkidle0" });
-    console.log("after network")
+
     const elements = await page.$$(".todo-text");
-    console.log("get elements")
     expect(elements.length).toBe(0);
   });
 
@@ -105,7 +103,6 @@ describe(projectName, () => {
       .put(/.*/, () => true)
       .reply(200, mocks.toDoAddResponse);
 
-      console.log("toDoAddResponse" , JSON.stringify(mocks.toDoAddResponse));
     await page.goto(path, { waitUntil: "networkidle0" });
 
     await page.type("#text-input", firstTaskText);
