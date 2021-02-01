@@ -67,6 +67,7 @@ function addInput (valueInput) {
     todoContainer.append(todoText);
     todoText.innerText = valueInput;
 }
+
 //set the delete button on the task
 function deleteButton () {
     const img = document.createElement('img');
@@ -74,8 +75,8 @@ function deleteButton () {
     img.classList.add('garbage-img');
     todoContainer.append(img);
 
-// create sure yes/no button before delete.
-img.addEventListener('click', (e) => {
+    // create sure yes/no button before delete.
+    img.addEventListener('click', (e) => {
         spanYesNo = document.createElement('span')
         viewSection.append(spanYesNo);
         spanYesNo.innerText = 'Are You Sure?'
@@ -93,6 +94,7 @@ img.addEventListener('click', (e) => {
         noDelete();
     })
 }
+
 // if user click on yes, function delete the task and remove the buttons. 
 function yesDelete(parentElem) {
     yesButton.addEventListener('click', () => {
@@ -112,7 +114,6 @@ function yesDelete(parentElem) {
         spanYesNo.remove();
         noButton.remove();
         yesButton.remove();
-        console.log(arrayContainerItems);
         if(!arrayContainerItems) {
             create ('I Am Empty')     // this is make sure the server get something but still the task list stay empty without this 
         }                              // the server don't let the option PUT with empty array/object
@@ -163,17 +164,15 @@ function editButton () {
     })
 }
 
-//this is active when the user click on edit button, it is change the button to done button, end define his options. 
+//this is active when the user click on edit button, it change the button to done button, end define his options. 
 function doneButton (img, textContent) {
     img.addEventListener('click', (e) => {
-            let i = 0;
             for (let task of arrayContainerItems) {
                 if (task.id === Number(textContent.parentElement.getAttribute('id'))) { 
                     task.text = textContent.innerText;
                     create(arrayContainerItems);
                     break;
-                } 
-                i++;
+                }
             }
             textContent.contentEditable = false;
             textContent.style.backgroundColor = '';
@@ -208,12 +207,10 @@ sortButton.addEventListener('click', () => {
         for (let item of arrayContainerItems) {
             if (item.priority === `${i}`) {
                 replaceItemsBySort(item, j++);
-                console.log(item.priority);
             }
         }    
     }   
 })
-
 
 // find if the search value include in the task and remark them.
 searchButton.addEventListener('click', (e) => {
@@ -273,6 +270,7 @@ function makeObject(valueInput, timeCreated, valuePriority) {
     
 }
 
+//mark the text with trough line for task that done.
 function checkBoxButton () {
     const checkBox = document.createElement('input');
     checkBox.setAttribute('type', 'checkbox');
@@ -287,6 +285,7 @@ function checkBoxButton () {
     })
 }
 
+//clear the board from all tasks
 restoreButton.addEventListener('click', () => {
     let taskOnBoard = document.querySelectorAll('.todo-container');
     for (let task of taskOnBoard) {
