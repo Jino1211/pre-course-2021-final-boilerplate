@@ -57,7 +57,7 @@ mdn httprequeste
 
 w3schools.com
 
-https://css-tricks.com/custom-styling-form-inputs-with-modern-css-features/
+https://css-tricks.com/
 
 https://www.youtube.com/watch?v=K7AHtWR2Zyk&t=1447s
 
