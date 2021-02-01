@@ -12,7 +12,7 @@ I also added some exta function like those:
 
 * 'oldest/newes' sort the board from the newes to oldest tasks and oposite.
 
-*'search' that can find and remark the tasks with the insert input.
+* 'search' that can find and remark the tasks with the insert input.
 
 * all the task and the update changes save on JSONBIN.IO.
 
