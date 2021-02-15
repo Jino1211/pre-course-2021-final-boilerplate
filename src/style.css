@@ -116,13 +116,12 @@ select {
 }
 .loader.run {
   position: relative;
-  top: 6em;
-  left: 30%;
-  border: 16px solid #64471d;
+  display: inline-flex;
+  border: 7px solid #64471d;
   border-radius: 50%;
-  border-top: 16px solid var(--text-color);
-  width: 10em;
-  height: 10em;
+  border-top: 7px solid var(--text-color);
+  width: 1em;
+  height: 1em;
   animation: spin 2s linear infinite;
 }
 @keyframes spin {

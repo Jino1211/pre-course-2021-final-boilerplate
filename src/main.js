@@ -299,55 +299,78 @@ restoreButton.addEventListener('click', () => {
 
 
 // create post API request to jsonbin server
-async function create (arrayContainerItems) {
+// async function create (arrayContainerItems) {
+//     document.querySelector('.loader').classList.add('run');
+//     myTodo = {'my-todo': arrayContainerItems};
+//     console.log("myTodo", myTodo);
+//     try {
+//         const data = await fetch('https://api.jsonbin.io/v3/b/60130624ef99c57c734b2b7c', {
+//             method: 'PUT',
+//             headers: {
+//               'Content-Type': 'application/json',
+//               'X-Master-Key': '$2b$10$ZFiUgXxIT37j9HZKTvXJkOfMRxB0OzLbyOCbiPFSr4AOca6buiMYi',
+//               'X-Collection-Id': '6013058bef99c57c734b2b3f',
+//               'X-Bin-Private': false,
+//             },
+//             body : JSON.stringify(myTodo)
+//           })
+//           document.querySelector('.loader').classList.remove('run');
+//         console.log("Recieved data", data)
+//     } catch (e) {
+//         console.error("there was an error:" + e);
+//     }
+
+// }
+
+function create (arrayContainerItems) {
+    document.querySelector('.loader').classList.add('run');
     myTodo = {'my-todo': arrayContainerItems};
     console.log("myTodo", myTodo);
-    try {
-        const data = await fetch('https://api.jsonbin.io/v3/b/60130624ef99c57c734b2b7c', {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-              'X-Master-Key': '$2b$10$ZFiUgXxIT37j9HZKTvXJkOfMRxB0OzLbyOCbiPFSr4AOca6buiMYi',
-              'X-Collection-Id': '6013058bef99c57c734b2b3f',
-              'X-Bin-Private': false,
-            //   'X-Bin-Name': Array.id
-            },
-            body : JSON.stringify(myTodo)
-          })
-        console.log("Recieved data", data)
-    } catch (e) {
-        console.error("there was an error:" + e);
-    }
+    const dataPromise = fetch('https://api.jsonbin.io/v3/b/60130624ef99c57c734b2b7c', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Master-Key': '$2b$10$ZFiUgXxIT37j9HZKTvXJkOfMRxB0OzLbyOCbiPFSr4AOca6buiMYi',
+          'X-Collection-Id': '6013058bef99c57c734b2b3f',
+          'X-Bin-Private': false,
+        },
+        body : JSON.stringify(myTodo)
+        })
+        dataPromise.then(res => {
+            if (!res.ok) {
+            document.querySelector('.loader').classList.remove('run');
+            throw(new Error('Cant put the data in server'));
+        }
+            console.log("Received data:", res)
+            // console.log("data Promise:", dataPromise)
+            document.querySelector('.loader').classList.remove('run')
+        }).catch ((e)=> console.log(e));
+         
 
 }
 
-//get 
-async function read () {
+
+function read () {
     document.querySelector('.loader').classList.add('run');
-    try {
-        await fetch('https://api.jsonbin.io/v3/b/60130624ef99c57c734b2b7c/latest', {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'X-Master-Key': '$2b$10$ZFiUgXxIT37j9HZKTvXJkOfMRxB0OzLbyOCbiPFSr4AOca6buiMYi'
-            }
-          })
-          .then(res => res.json())
-          .then(data => {
-              console.log("data", data.record);
-              insertSaveDataToDocument(data.record);
-          })
-          .catch(error => console.log("error", error));
-    } catch (error) {
-        console.log(error.message);
+    const fetchPromise = fetch ('https://api.jsonbin.io/v3/b/60130624ef99c57c734b2b7c/latest')
+    console.log(fetchPromise);
+    const res = fetchPromise.then(res => {
+        document.querySelector('.loader').classList.remove('run');
+        return res.json();
+    })
+    res.then(data => {
+            console.log(fetchPromise);
+            console.log(res);
+            console.log("data", data);
+            insertSaveDataToDocument(data.record);
+    }).catch(error => console.log("error", error));
     }
-}
+
 
 //upload the save task from the server 
 function insertSaveDataToDocument (data) {
     arrayContainerItems = data['my-todo'];
-    document.querySelector('.loader').classList.remove('run')
-    console.log("data", arrayContainerItems)
+    // console.log("data", arrayContainerItems)
     if (arrayContainerItems) {
         // secure the jsonbin server from error message
         // counterId = arrayContainerItems[arrayContainerItems.length-1].id+1; // make sure
@@ -366,3 +389,4 @@ function insertSaveDataToDocument (data) {
     console.log(arrayContainerItems); // make sure
     } else {console.log('empty');}
 }
+
