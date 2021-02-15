@@ -345,8 +345,6 @@ function create (arrayContainerItems) {
             // console.log("data Promise:", dataPromise)
             document.querySelector('.loader').classList.remove('run')
         }).catch ((e)=> console.log(e));
-         
-
 }
 
 
@@ -355,14 +353,11 @@ function read () {
     const fetchPromise = fetch ('https://api.jsonbin.io/v3/b/60130624ef99c57c734b2b7c/latest')
     console.log(fetchPromise);
     const res = fetchPromise.then(res => {
-        document.querySelector('.loader').classList.remove('run');
         return res.json();
     })
     res.then(data => {
-            console.log(fetchPromise);
-            console.log(res);
-            console.log("data", data);
-            insertSaveDataToDocument(data.record);
+        document.querySelector('.loader').classList.remove('run');
+        insertSaveDataToDocument(data.record);
     }).catch(error => console.log("error", error));
     }
 
