@@ -326,7 +326,7 @@ function create (arrayContainerItems) {
     document.querySelector('.loader').classList.add('run');
     myTodo = {'my-todo': arrayContainerItems};
     console.log("myTodo", myTodo);
-    const dataPromise = fetch('https://api.jsonbin.io/v3/b/60130624ef99c57c734b2b7c', {
+    fetch('https://api.jsonbin.io/v4/b/60130624ef99c57c734b2b7c', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -336,30 +336,35 @@ function create (arrayContainerItems) {
         },
         body : JSON.stringify(myTodo)
         })
-        dataPromise.then(res => {
-            if (!res.ok) {
-            document.querySelector('.loader').classList.remove('run');
-            throw(new Error('Cant put the data in server'));
-        }
-            console.log("Received data:", res)
-            // console.log("data Promise:", dataPromise)
+        .then(res => res.json())
+        .then(data => {
+            console.log('Success:', data);
             document.querySelector('.loader').classList.remove('run')
-        }).catch ((e)=> console.log(e));
+        })
+        .catch ((e) => {
+            console.log('There was an error:', e)
+            document.querySelector('.loader').classList.remove('run')
+        });
 }
 
 
 function read () {
     document.querySelector('.loader').classList.add('run');
-    const fetchPromise = fetch ('https://api.jsonbin.io/v3/b/60130624ef99c57c734b2b7c/latest')
-    console.log(fetchPromise);
-    const res = fetchPromise.then(res => {
+    fetch ('https://api.jsonbin.io/v3/b/60130624ef99c57c734b2b7c/latest')
+    .then(res => {
+        if(!res.ok){
+          throw new Error('Failed to connect jsonBin')  
+        }
         return res.json();
-    })
-    res.then(data => {
+    }).then(data => {
         document.querySelector('.loader').classList.remove('run');
+        console.log(data);
         insertSaveDataToDocument(data.record);
-    }).catch(error => console.log("error", error));
-    }
+    }).catch((error) => {
+        console.log("error", error)
+        document.querySelector('.loader').classList.remove('run')
+    });
+}
 
 
 //upload the save task from the server 
