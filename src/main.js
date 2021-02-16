@@ -326,7 +326,7 @@ function create (arrayContainerItems) {
     document.querySelector('.loader').classList.add('run');
     myTodo = {'my-todo': arrayContainerItems};
     console.log("myTodo", myTodo);
-    fetch('https://api.jsonbin.io/v4/b/60130624ef99c57c734b2b7c', {
+    fetch('https://api.jsonbin.io/v3/b/60130624ef99c57c734b2b7c', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
