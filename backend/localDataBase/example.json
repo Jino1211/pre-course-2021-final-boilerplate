@@ -1,4 +1,6 @@
-[
+{
+    "my-todo":
+    [
     {
         "text": "An example to-do",
         "priority": "1",
@@ -10,3 +12,4 @@
         "date": 1611661776177
     }
 ]
+}
