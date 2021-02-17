@@ -1,8 +1,7 @@
 const { json } = require('express');
 const express = require('express');
+const { v4: uuidv4 } = require('uuid');
 
-let i = 0;
-const binName = `uniq${i}`;
 
 const app = express();
 const fs = require('fs');
@@ -24,6 +23,7 @@ app.get('/b', (req, res) => {
     console.log('before');
 });
 
+// send specific data by id to client
 app.get('/b/:id', (req, res) => {
     const {id} = req.params;
     fs.readFile(`./backend/localDataBase/${id}.json`, 'utf8', (err, data) => {
@@ -38,21 +38,17 @@ app.get('/b/:id', (req, res) => {
 
 app.post('/b', (req, res) => {
     console.log(req.body);
-    // fs.access(`./backend/localDataBase/${binName}.json`, fs.constants.F_OK, (err) => {
-    //     if(!err) {
-    //         res.status(400).json(`The file whit this name is already exist: ${err}`);
-    //         return
-    //     }
-        fs.writeFile(`./backend/localDataBase/${binName}.json`, JSON.stringify(req.body), (err) => {
-            if(!err) {
-                res.status(400).json(`unsuccess create file: ${err}`);
-                return
-            }
-            console.log(`Success create new file with uniq id ${binName}`);
-            res.json(`the uniq id of this task: ${JSON.stringify(req.body)} is ${binName}`);
-            i++;
-        });
+    const binName = uuidv4();
+    fs.writeFile(`./backend/localDataBase/${binName}.json`, JSON.stringify(req.body), (err) => {
+        if(err !== null) {
+            res.status(400).json(`unsuccess create file: ${err}`);
+            return
+        }
+        console.log(`Success create new file with uniq id ${binName}`);
+        res.json(`the uniq id of this task is: ${binName}`);
+        
     });
+});
 
 app.put('/b/:id', (req, res) => {
     const {id} = req.params;

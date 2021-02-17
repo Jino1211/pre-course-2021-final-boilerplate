@@ -303,7 +303,7 @@ async function create (arrayContainerItems) {
     myTodo = {'my-todo': arrayContainerItems};
     console.log("myTodo", myTodo);
     try {
-        const data = await fetch('https://api.jsonbin.io/v3/b/60130624ef99c57c734b2b7c', {
+        const data = await fetch('http://localhost:3000/b/localtodos', {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
@@ -325,7 +325,7 @@ async function create (arrayContainerItems) {
 async function read () {
     document.querySelector('.loader').classList.add('run');
     try {
-        await fetch('https://api.jsonbin.io/v3/b/60130624ef99c57c734b2b7c/latest', {
+        await fetch('http://localhost:3000/b/localtodos', {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -334,8 +334,8 @@ async function read () {
           })
           .then(res => res.json())
           .then(data => {
-              console.log("data", data.record);
-              insertSaveDataToDocument(data.record);
+              console.log("data", data);   //on json-bin bin should be data.record
+              insertSaveDataToDocument(data);       //on json-bin bin should be data.record
           })
           .catch(error => console.log("error", error));
     } catch (error) {
