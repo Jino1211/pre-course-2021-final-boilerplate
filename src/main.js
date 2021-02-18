@@ -304,7 +304,7 @@ async function create (arrayContainerItems) {
     myTodo = {'my-todo': arrayContainerItems};
     console.log("myTodo", myTodo);
     try {
-        const data = await fetch('http://localhost:3000/b/localtodos', {
+        const data = await fetch('https://api.jsonbin.io/v3/b/60130624ef99c57c734b2b7c', {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
@@ -328,7 +328,7 @@ async function create (arrayContainerItems) {
 async function read () {
     document.querySelector('.loader').classList.add('run');
     try {
-        await fetch('http://localhost:3000/b/localtodos', {
+        await fetch('https://api.jsonbin.io/v3/b/60130624ef99c57c734b2b7c', {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
