@@ -300,6 +300,7 @@ restoreButton.addEventListener('click', () => {
 
 // create post API request to jsonbin server
 async function create (arrayContainerItems) {
+    document.querySelector('.loader').classList.add('run');
     myTodo = {'my-todo': arrayContainerItems};
     console.log("myTodo", myTodo);
     try {
@@ -315,7 +316,9 @@ async function create (arrayContainerItems) {
             body : JSON.stringify(myTodo)
           })
         console.log("Recieved data", data)
+        document.querySelector('.loader').classList.remove('run')
     } catch (e) {
+        document.querySelector('.loader').classList.remove('run')
         console.error("there was an error:" + e);
     }
 
@@ -334,11 +337,14 @@ async function read () {
           })
           .then(res => res.json())
           .then(data => {
+            document.querySelector('.loader').classList.remove('run')
               console.log("data", data);   //on json-bin bin should be data.record
               insertSaveDataToDocument(data);       //on json-bin bin should be data.record
           })
           .catch(error => console.log("error", error));
+          document.querySelector('.loader').classList.remove('run')
     } catch (error) {
+        document.querySelector('.loader').classList.remove('run')
         console.log(error.message);
     }
 }
@@ -346,7 +352,6 @@ async function read () {
 //upload the save task from the server 
 function insertSaveDataToDocument (data) {
     arrayContainerItems = data['my-todo'];
-    document.querySelector('.loader').classList.remove('run')
     console.log("data", arrayContainerItems)
     if (arrayContainerItems) {
         // secure the jsonbin server from error message

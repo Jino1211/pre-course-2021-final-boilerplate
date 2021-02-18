@@ -9,6 +9,14 @@ const { nextTick } = require('process');
 
 const {logger} = require('./exportFile')
 
+const waiter = (req, res , next) => {
+    setTimeout(()=>{ 
+        console.log('Here i wait a second hahah');
+        next()}, 1000)
+};
+
+
+app.use(waiter)
 app.use(logger);
 app.use(express.json());
 
