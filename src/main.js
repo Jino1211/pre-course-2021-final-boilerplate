@@ -338,8 +338,8 @@ async function read () {
           .then(res => res.json())
           .then(data => {
             document.querySelector('.loader').classList.remove('run')
-              console.log("data", data);   //on json-bin bin should be data.record
-              insertSaveDataToDocument(data);       //on json-bin bin should be data.record
+              console.log("data", data.record);  
+              insertSaveDataToDocument(data.record);       
           })
           .catch(error => console.log("error", error));
           document.querySelector('.loader').classList.remove('run')
