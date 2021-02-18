@@ -15,13 +15,16 @@ app.use(express.json());
 
 //send data to client
 app.get('/b', (req, res) => {
-    fs.readFile('./backend/localDataBase/example.json', 'utf8', (err, data) => {
-        if (err) res.status('404');
-        res.status(200).send(data);
-        console.log('got it:');
+    let allBins = []
+    let filesName = fs.readdirSync('./backend/localDataBase')
+    if (!filesName) res.status('204').json(`no files: ${err}`);
+    filesName.forEach(element => {
+        allBins.push(JSON.parse(fs.readFileSync(`./backend/localDataBase/${element}`, {encoding:'utf8', flag:'r'})))
+        });
+        res.send(allBins)
     });
     console.log('before');
-});
+
 
 // send specific data by id to client
 app.get('/b/:id', (req, res) => {
@@ -45,8 +48,7 @@ app.post('/b', (req, res) => {
             return
         }
         console.log(`Success create new file with uniq id ${binName}`);
-        res.json(`the uniq id of this task is: ${binName}`);
-        
+        res.status(201).json(`the uniq id of this task is: ${binName}`); 
     });
 });
 
