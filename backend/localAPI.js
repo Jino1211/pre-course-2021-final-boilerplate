@@ -21,13 +21,13 @@ app.use(express.json());
 app.get('/b', (req, res) => {
     let allBins = []
     let filesName = fs.readdirSync('./backend/localDataBase')
-    if (!filesName) res.status('204').json(`no files: ${err}`);
+    if (!filesName) res.status('204').json(`no files`);
     filesName.forEach(element => {
         allBins.push(JSON.parse(fs.readFileSync(`./backend/localDataBase/${element}`, {encoding:'utf8', flag:'r'})))
-        });
-        res.send(allBins)
     });
+    res.send(allBins);
     console.log('before');
+});
 
 
 // send specific data by id to client
@@ -74,20 +74,15 @@ app.put('/b/:id', (req, res) => {
 app.delete('/b/:id', (req, res) => {
     const {id} = req.params;
     console.log(req.body);
-    fs.access(`./backend/localDataBase/${id}.json`, fs.constants.F_OK, (err) => {
-        if(err) {
-            res.status(404).json(`This file does not exist: ${err}`);
+    fs.unlink(`./backend/localDataBase/${id}.json`, (err) => {
+        if (err) {
+            res.status(500).json({msg: `can not remove this file:${err}` })
             return;
         }
-        fs.unlink(`./backend/localDataBase/${id}.json`, (err) => {
-            if (err) {
-                res.status(500).json({msg: `can not remove this file:${err}` })
-                return;
-            }
-            res.json('Remove success');
-        });
+        res.json('Remove success');
     });
 });
+
 
 
 
