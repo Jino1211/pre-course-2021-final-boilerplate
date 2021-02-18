@@ -7,16 +7,12 @@ const app = express();
 const fs = require('fs');
 const { nextTick } = require('process');
 
-const {logger} = require('./exportFile')
-
-const waiter = (req, res , next) => {
-    setTimeout(()=>{ 
-        console.log('Here i wait a second hahah');
-        next()}, 1000)
-};
+const {logger} = require('./middleware')
+const {waiter} = require('./middleware')
 
 
-app.use(waiter)
+
+app.use(waiter);
 app.use(logger);
 app.use(express.json());
 
