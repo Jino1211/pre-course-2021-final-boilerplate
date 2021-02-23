@@ -72,7 +72,7 @@ app.put("/b/:id", (req, res) => {
   console.log(req.body);
   fs.access(`./backend/localDataBase/${id}.json`, fs.constants.F_OK, (err) => {
     if (err) {
-      res.status(404).json(`The file does not exist: ${err}`);
+      res.status(404).json(`The file does not exist`);
       return;
     }
     fs.writeFile(
