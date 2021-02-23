@@ -5,6 +5,7 @@
   "main": "main.js",
   "scripts": {
     "test": "jest --verbose",
+    "testApi": "jest API.test.js",
     "start": "node ./backend/localAPI",
     "dev": "nodemon ./backend/localAPI"
   },
@@ -25,7 +26,8 @@
     "nock": "^13.0.6",
     "nock-puppeteer": "^1.0.2",
     "nodemon": "^2.0.7",
-    "puppeteer": "^4.0.1"
+    "puppeteer": "^4.0.1",
+    "supertest": "^6.1.3"
   },
   "dependencies": {
     "express": "^4.17.1",
